@@ -68,6 +68,7 @@ app.component('Editor', Editor)
 
 app.use(router)
 app.use(store)
+// 全局函数 指令式组件 应该作为 app 的provide 提供， 结合 inject 进行使用注入 而不是 在组合式api 的 使用组件实例 根据原型查找
 app.use(plugins)
 app.use(elementIcons)
 app.component('svg-icon', SvgIcon)

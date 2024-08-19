@@ -166,6 +166,8 @@ import router from "@/router";
 import importTable from "./importTable";
 import createTable from "./createTable";
 
+const modal2 = inject('$modal2')
+
 const route = useRoute();
 const { proxy } = getCurrentInstance();
 
@@ -273,6 +275,7 @@ function openCreateTable() {
 
 /** 重置按钮操作 */
 function resetQuery(formRef) {
+  modal2.msgSuccess('可以正常使用');
   dateRange.value = [];
   // proxy.resetForm("queryRef");
   // queryRef.resetFields();

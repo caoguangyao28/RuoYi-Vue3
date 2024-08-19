@@ -15,4 +15,6 @@ export default function installPlugins(app){
   app.config.globalProperties.$modal = modal
   // 下载文件
   app.config.globalProperties.$download = download
+  // 这个比较 符合 vue3 官方推荐的用法
+  app.provide('$modal2', modal)
 }
