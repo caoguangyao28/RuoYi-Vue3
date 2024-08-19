@@ -31,7 +31,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        <el-button icon="Refresh" @click="resetQuery(queryRef)">重置</el-button>
       </el-form-item>
     </el-form>
 
@@ -179,6 +179,7 @@ const total = ref(0);
 const tableNames = ref([]);
 const dateRange = ref([]);
 const uniqueId = ref("");
+const queryRef = ref();
 
 const data = reactive({
   queryParams: {
@@ -197,16 +198,26 @@ const data = reactive({
 
 const { queryParams, preview } = toRefs(data);
 
+onMounted(() => {
+  console.log('onMounted');
+  const time = route.query.t;
+  dateRange.value = [time];
+})
+
 onActivated(() => {
   const time = route.query.t;
+  // console.log('由缓存插入dom',time);
   if (time != null && time != uniqueId.value) {
     uniqueId.value = time;
     queryParams.value.pageNum = Number(route.query.pageNum);
-    dateRange.value = [];
-    proxy.resetForm("queryForm");
+    console.log(time)
+    dateRange.value = [time, '2024-08-20'];
+    // queryRef.value.resetForm("queryRef");
+    queryRef.value.resetFields();// 这里为什么一定要 value？ 生命周期以及 直接运行与script中的 都需要 .value 响应式原理决定了
     getList();
   }
 })
+
 
 /** 查询表集合 */
 function getList() {
@@ -261,9 +272,12 @@ function openCreateTable() {
 }
 
 /** 重置按钮操作 */
-function resetQuery() {
+function resetQuery(formRef) {
   dateRange.value = [];
-  proxy.resetForm("queryRef");
+  // proxy.resetForm("queryRef");
+  // queryRef.resetFields();
+  console.log(formRef);
+  formRef.resetFields(); // 这里 formRef 可以直接用 因为 来自模版 模版经过 reactive 特殊处理
   handleQuery();
 }
 
