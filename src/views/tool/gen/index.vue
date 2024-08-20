@@ -200,11 +200,11 @@ const data = reactive({
 
 const { queryParams, preview } = toRefs(data);
 
-onMounted(() => {
-  console.log('onMounted');
-  const time = route.query.t;
-  dateRange.value = [time];
-})
+// onMounted(() => {
+//   console.log('onMounted');
+//   const time = route.query.t;
+//   dateRange.value = [time];
+// })
 
 onActivated(() => {
   const time = route.query.t;
@@ -213,7 +213,7 @@ onActivated(() => {
     uniqueId.value = time;
     queryParams.value.pageNum = Number(route.query.pageNum);
     console.log(time)
-    dateRange.value = [time, '2024-08-20'];
+    // dateRange.value = [time, '2024-08-20'];
     // queryRef.value.resetForm("queryRef");
     queryRef.value.resetFields();// 这里为什么一定要 value？ 生命周期以及 直接运行与script中的 都需要 .value 响应式原理决定了
     getList();
@@ -275,11 +275,11 @@ function openCreateTable() {
 
 /** 重置按钮操作 */
 function resetQuery(formRef) {
-  modal2.msgSuccess('可以正常使用');
+  modal2.msgSuccess('inject 全局modal可以正常使用');
   dateRange.value = [];
   // proxy.resetForm("queryRef");
   // queryRef.resetFields();
-  console.log(formRef);
+  // console.log(formRef);
   formRef.resetFields(); // 这里 formRef 可以直接用 因为 来自模版 模版经过 reactive 特殊处理
   handleQuery();
 }
