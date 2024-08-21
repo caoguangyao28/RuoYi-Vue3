@@ -13,6 +13,7 @@ NProgress.configure({ showSpinner: false });
 
 const whiteList = ['/login', '/register'];
 
+// 路由守卫
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
@@ -24,6 +25,7 @@ router.beforeEach((to, from, next) => {
     } else if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
+      // store 进行本地缓存后 这里存在问题 原代码试用与初次加载
       if (useUserStore().roles.length === 0) {
         isRelogin.show = true
         // 判断当前用户是否已拉取完user_info信息
@@ -33,9 +35,10 @@ router.beforeEach((to, from, next) => {
             // 根据roles权限生成可访问的路由表
             accessRoutes.forEach(route => {
               if (!isHttp(route.path)) {
-                router.addRoute(route) // 动态添加可访问路由表
+                router.addRoute(route) // 动态添加可访问路由表 这里是不是与generateRoutes 重复添加了
               }
             })
+            console.log(router.getRoutes(), '所有路由')
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
           })
         }).catch(err => {
@@ -45,6 +48,7 @@ router.beforeEach((to, from, next) => {
           })
         })
       } else {
+        // 存在缓存时 组织动态路由信息 TODO
         next()
       }
     }

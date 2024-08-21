@@ -13,6 +13,7 @@ export default function persistPlugin(storecontent) {
     // 存入时节 页面卸载前
     window.addEventListener('beforeunload', () => {
         // store.$store 响应式数据
+        console.log('beforeunload', JSON.stringify(store.$state));
         localStorage.setItem(key, JSON.stringify(store.$state));
     })
 

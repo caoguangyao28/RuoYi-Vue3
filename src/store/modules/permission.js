@@ -7,6 +7,7 @@ import InnerLink from '@/layout/components/InnerLink'
 
 // 匹配views里面所有的.vue文件
 const modules = import.meta.glob('./../../views/**/*.vue')
+console.log('所有views模块', modules)
 
 const usePermissionStore = defineStore(
   'permission',
@@ -42,8 +43,10 @@ const usePermissionStore = defineStore(
             const sidebarRoutes = filterAsyncRouter(sdata)
             const rewriteRoutes = filterAsyncRouter(rdata, false, true)
             const defaultRoutes = filterAsyncRouter(defaultData)
+            // 通过auth 验证过滤具有权限的菜单 -start
             const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
             asyncRoutes.forEach(route => { router.addRoute(route) })
+            // 通过auth 验证过滤具有权限的菜单 - end
             this.setRoutes(rewriteRoutes)
             this.setSidebarRouters(constantRoutes.concat(sidebarRoutes))
             this.setDefaultRoutes(sidebarRoutes)
@@ -128,6 +131,7 @@ export function filterDynamicRoutes(routes) {
   return res
 }
 
+// 动态路由模块怎么加载的？部分路由时配置在后端的
 export const loadView = (view) => {
   let res;
   for (const path in modules) {
